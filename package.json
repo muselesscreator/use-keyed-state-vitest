@@ -39,6 +39,7 @@
     "test": "vitest --coverage"
   },
   "devDependencies": {
+    "@muselesscreator/get-effects": "^0.0.1",
     "@muselesscreator/strict-dict": "^0.0.3",
     "@reduxjs/toolkit": "^1.5.1",
     "@testing-library/dom": "^9.3.0",

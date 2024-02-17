@@ -6,10 +6,11 @@ import {
   beforeEach,
 } from 'vitest';
 import React from 'react';
+import getEffects from '@muselesscreator/get-effects';
 import mockUseKeyedState from '../mockUseKeyedState';
-import * as axios from './axios';
 
 import * as hooks from './hooks';
+const { useExampleComponentData } = hooks;
 
 vi.mock('react-intl', () => {
   const i18n = vi.importActual('@edx/frontend-platform/i18n');
@@ -29,27 +30,14 @@ vi.mock('react', () => ({
   },
 }));
 
-vi.mock('./axios', () => ({
-  post: vi.fn(),
-}));
-
-const { useExampleComponentData } = hooks;
 const state = mockUseKeyedState(hooks.stateKeys);
 
 let out;
 
-// Simple fake api fetch method.
-let postThen;
-axios.post.mockReturnValue(new Promise(resolve => { postThen = resolve; }));
-
-// Simple fake form data for submission.
-const testFile = 'test-file';
-const testFormData = new FormData();
-testFormData.append('csv', testFile);
 
 // Mock ref for shallow testing, to allow hooks to access as normal.
 const ref = {
-  current: { click: vi.fn(), files: [testFile], value: 'test-value' },
+  current: { click: vi.fn(), value: 'test-value' },
 };
 
 describe('ExampleComponent hooks', () => {
@@ -70,10 +58,9 @@ describe('ExampleComponent hooks', () => {
         /**
          * Use expectInitializedWith to validate initialization calls
          */
-        state.expectInitializedWith(state.keys.importedClicked, 0);
-        state.expectInitializedWith(state.keys.fileInputChanged, null);
         state.expectInitializedWith(state.keys.loaded, false);
         state.expectInitializedWith(state.keys.numEvents, 0);
+        state.expectInitializedWith(state.keys.importedClicked, 0);
       });
       it('initializes react ref', () => {
         expect(React.useRef).toHaveBeenCalled();
@@ -96,7 +83,6 @@ describe('ExampleComponent hooks', () => {
         const cb = getEffects([
           state.setState.numEvents,
           state.values.importedClicked,
-          state.values.fileInputChanged,
         ], React)[0];
         cb();
         /**
@@ -124,24 +110,6 @@ describe('ExampleComponent hooks', () => {
           out.handleImportedComponentClicked();
           expect(ref.current.click).not.toHaveBeenCalled();
         });
-      });
-      describe('handleFileInputChanged', () => {
-        it('does not crash if no file input available', () => {
-          React.useRef.mockReturnValueOnce({ current: null });
-          out = useExampleComponentData();
-          out.handleFileInputChanged();
-        });
-        it('posts formData, clearingInput on success', async () => {
-          out.handleFileInputChanged(testFile);
-          const [[url, data]] = axios.post.mock.calls;
-          expect(url).toEqual(hooks.formUrl);
-          expect(data.entries).toEqual(testFormData.entries);
-          await postThen();
-          expect(out.fileInputRef.current.value).toEqual(null);
-        });
-      });
-      it('passes fileInputRef from hook', () => {
-        expect(out.fileInputRef).toEqual(ref);
       });
       it('passes hooks.formUrl from hook', () => {
         expect(out.formAction).toEqual(hooks.formUrl);

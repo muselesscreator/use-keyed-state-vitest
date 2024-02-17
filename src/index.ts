@@ -1,2 +1,2 @@
-export { default as useKeyedState } from './useKeyedState';
+export { useKeyedState } from './hooks';
 export { default as mockUseKeyedState } from './mockUseKeyedState';
