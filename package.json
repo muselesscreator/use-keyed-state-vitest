@@ -1,5 +1,5 @@
 {
-  "name": "@muselesscreator/use-keyed-state",
+  "name": "@muselesscreator/use-keyed-state-vitest",
   "version": "0.0.0",
   "description": "React toolkit for writing and testing react components",
   "main": "dist/index.js",
@@ -26,9 +26,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/muselesscreator/use-keyed-state.git"
+    "url": "git+https://github.com/muselesscreator/use-keyed-state-vitest.git"
   },
-  "homepage": "https://github.com/muselesscreator/use-keyed-state#README",
+  "homepage": "https://github.com/muselesscreator/use-keyed-state-vitest#README",
   "scripts": {
     "dev": "vite",
     "build": "tsc && tsup src/index.ts --format cjs,esm --minify --dts --legacy-output dist",
