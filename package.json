@@ -1,6 +1,6 @@
 {
   "name": "@muselesscreator/use-keyed-state-vitest",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "React toolkit for writing and testing react components",
   "main": "dist/index.js",
   "release": {
