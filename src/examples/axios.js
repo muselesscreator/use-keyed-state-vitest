@@ -1,3 +1,4 @@
+/* v8 ignore start */
 import { vi } from 'vitest';
 
 
